@@ -1,0 +1,27 @@
+import pandas as pd
+
+df=pd.read_csv('/content/drive/MyDrive/Melbourne_housing_FULL (1).csv')
+df
+from google.colab import drive         /*this part is optional as this code segment is used to mount 
+                                  
+drive.mount('/content/drive')         the Google drive with colab you can also do it manually.*/  
+df.isna().sum()
+calc_to_fill=['Price','Distance','Postcode','Bedroom2','Bathroom','Car','Landsize','BuildingArea','YearBuilt','CouncilArea','Lattitude','Longtitude','Regionname','Propertycount']
+df[calc_to_fill]=df[calc_to_fill].fillna(0)
+df.isna().sum()
+df1=df.drop(['Address','Postcode','Date','YearBuilt','Lattitude','Longtitude'],axis=1)
+df1
+df2=pd.get_dummies(df1)
+df2
+x=df2.drop(['Price'],axis=1)
+y=df['Price']
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,train_size=0.2)
+from sklearn.linear_model import LinearRegression 
+lr=LinearRegression().fit(x_train,y_train)
+lr.score(x_train,y_train)
+from sklearn.linear_model import LinearRegression 
+lr=LinearRegression().fit(x_test,y_test)
+lr.score(x_test,y_test)
+from sklearn.linear_model import Lasso
+ls=Lasso(alpha=0.2,max_iter=800)
